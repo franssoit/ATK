@@ -9,13 +9,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
-
-import org.apache.log4j.Logger;
-
 import com.orange.atk.atkUI.corecli.Configuration;
 import com.orange.atk.platform.Platform;
 
 import fi.iki.elonen.NanoHTTPD;
+import org.apache.log4j.Logger;
 
 public class WebServer extends NanoHTTPD {
 	private static final String TAG = NanoHTTPD.class.getName();
@@ -90,11 +88,12 @@ public class WebServer extends NanoHTTPD {
      * Serves file from homeDir and its' subdirectories (only). Uses only URI, ignores all headers and HTTP parameters.
      */
     public Response serveFile(String uri, Map<String, String> header, File homeDir) {
+        Logger.getLogger(TAG).debug("uri: "+uri+" " );
         Response res = null;
 
         // Make sure we won't die of an exception later
         if (!homeDir.isDirectory())
-            res = new Response(Response.Status.INTERNAL_ERROR, NanoHTTPD.MIME_PLAINTEXT, "INTERNAL ERRROR: serveFile(): given homeDir is not a directory.");
+            res = new Response(Response.Status.INTERNAL_ERROR, NanoHTTPD.MIME_PLAINTEXT, "INTERNAL ERRROR: serveFile(): given homeDir is not a directory: "+homeDir.toString());
 
         if (res == null) {
             // Remove URL arguments
@@ -256,8 +255,7 @@ public class WebServer extends NanoHTTPD {
 
     @Override
     public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms, Map<String, String> files) {
-        System.out.println(method + " '" + uri + "' ");
-
+        Logger.getLogger(TAG).debug(method + " '" + uri + "' ");
         Iterator<String> e = header.keySet().iterator();
         while (e.hasNext()) {
             String value = e.next();
@@ -278,7 +276,7 @@ public class WebServer extends NanoHTTPD {
     }
 
     public static void run() {
-    	Logger.getLogger(TAG).info("NanoHTTPD 1.25 (C) 2001,2005-2011 Jarno Elonen and (C) 2010 Konstantinos Togias");
+        Logger.getLogger(TAG).info("NanoHTTPD 1.25 (C) 2001,2005-2011 Jarno Elonen and (C) 2010 Konstantinos Togias");
 
         // Defaults
         int port = 8080;

@@ -38,7 +38,7 @@ public class AROLauncher {
         Logger.getLogger(AROLauncher.class).info(LAUNCHARO + " from " + AROPATH);
         ProcessBuilder pb = new ProcessBuilder();
         pb.directory(new File(AROPATH));
-        pb.inheritIO();
+        //pb.inheritIO();
         return pb;
     }
 
